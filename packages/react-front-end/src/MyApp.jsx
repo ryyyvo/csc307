@@ -24,7 +24,7 @@ const characters = [
 function MyApp() {
   return (
     <div className="container">
-      <Table />
+      <Table characterData={characters} />
     </div>
   );
 }
