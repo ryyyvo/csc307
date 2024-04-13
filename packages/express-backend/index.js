@@ -73,7 +73,7 @@ app.get("/users/:id", (req, res) => {
     } else {
       res.send(result);
     }
-  });
+});
 
 const addUser = (user) => {
     users["users_list"].push(user);
@@ -83,17 +83,28 @@ const addUser = (user) => {
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
-    res.send()
+    res.status(201).send();
 });
 
-const deleteUser = (id) => {
-    const newUsers = users["users_list"]
+const deleteUserById = (id) => {
+    users["users_list"] = users["users_list"]
         .filter((user) => user["id"] !== id);
-    users["users_list"] = newUsers;
 };
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
-    deleteUser(id);
+    deleteUserById(id);
     res.send();
 });
+
+
+app.delete("/users", (req, res) => {
+    const deleteUser = req.body;
+    let nameArray = findUserByName(deleteUser["name"]);
+    nameArray = nameArray.filter( (user) => user["job"] === deleteUser["job"]);
+    for (let i = 0; i < nameArray.length; i++) 
+    {
+        deleteUserById(nameArray[i].id);
+    }
+    res.send();
+})
