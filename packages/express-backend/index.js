@@ -94,7 +94,7 @@ const deleteUserById = (id) => {
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
     deleteUserById(id);
-    res.send();
+    res.status(204).send();
 });
 
 
@@ -106,5 +106,5 @@ app.delete("/users", (req, res) => {
     {
         deleteUserById(nameArray[i].id);
     }
-    res.send();
+    res.status(204).send();
 })
