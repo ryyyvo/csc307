@@ -15,7 +15,8 @@ function MyApp() {
     setCharacters(updated);
   }
 
-  function updateList(person)
+  // uses postUser to send data to backend, and updates frontend list if POST is a success
+  function updateList(person) 
   {
     postUser(person)
                   .then(() => setCharacters([...characters, person]))
@@ -23,11 +24,12 @@ function MyApp() {
               )
   }
 
-  function fetchUsers() {
+  function fetchUsers() { 
     const promise = fetch("http://localhost:8000/users");
     return promise;
 }
 
+// fetches the initial users list from the backend
   useEffect(() => {
     fetchUsers()
               .then((res) => res.json())
@@ -35,6 +37,7 @@ function MyApp() {
               .catch((error) => { console.log(error); });
   }, [] );
 
+  // POSTS the entry to the backend 
   function postUser(person) 
   {
     const promise = fetch("http://localhost:8000/users", 
