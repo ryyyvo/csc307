@@ -58,9 +58,9 @@ app.get("/users", (req, res) => {
     if (name != undefined) {
         let result = findUserByName(name);
         result = { users_list: result};
-        res.send(result);
+        res.status(200).send(result);
     } else {
-        res.send(users);
+        res.status(200).send(users);
     }
 })
 
@@ -74,14 +74,20 @@ app.get("/users/:id", (req, res) => {
     if (result === undefined) {
       res.status(404).send("Resource not found.");
     } else {
-      res.send(result);
+      res.status(200).send(result);
     }
 });
 
+const generateRandomId = () => Math.floor(Math.random()*7817);
+
 const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
+
+  let randomId = generateRandomId().toString();
+  user["id"] = randomId;
+  users["users_list"].push(user);
+  return user;
 };
+
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
