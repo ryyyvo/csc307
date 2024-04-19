@@ -8,11 +8,24 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]);
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    })
-    setCharacters(updated);
+  function removeOneCharacter(id) {
+    // const updated = characters.filter((character, i) => {
+    //   return i !== index;
+    // })
+    // setCharacters(updated);
+    const promise = fetch(`http://localhost:8000/users/${id}`, 
+    {
+      method: "DELETE"
+      }
+    );
+
+    promise.then(() => {
+      fetchUsers()
+                .then((res) => res.json())
+                .then((json) => setCharacters(json["users_list"]))
+    }
+  );
+
   }
 
   // uses postUser to send data to backend, and updates frontend list if POST is a success
@@ -53,6 +66,7 @@ function MyApp() {
 
       return promise;
   }
+
 
   return (
     <div className="container">
