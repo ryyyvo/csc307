@@ -18,44 +18,6 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
-
-// const users = {
-//     users_list: [
-//       {
-//         id: "xyz789",
-//         name: "Charlie",
-//         job: "Janitor"
-//       },
-//       {
-//         id: "abc123",
-//         name: "Mac",
-//         job: "Bouncer"
-//       },
-//       {
-//         id: "ppp222",
-//         name: "Mac",
-//         job: "Professor"
-//       },
-//       {
-//         id: "yat999",
-//         name: "Dee",
-//         job: "Aspring actress"
-//       },
-//       {
-//         id: "zap555",
-//         name: "Dennis",
-//         job: "Bartender"
-//       }
-//     ]
-//   };
-
-
-// const findUserByName = (name) => {
-//     return users["users_list"].filter(
-//         (user) => user["name"] === name
-//     );
-// };
-
 app.get("/users", (req, res) => {
     const name = req.query.name;
     if (name != undefined) {
@@ -72,25 +34,20 @@ app.get("/users/:id", (req, res) => {
       userServices.findUserById(id)
         .then((result) => 
           {res.status(200).send(result);})
-        .catch((error) => {res.status(500).send(error)})
+        .catch((error) => {res.status(500).send(error);})
     }
 })
 
 const generateRandomId = () => Math.floor(Math.random()*7817);
 
-const addUser = (user) => {
-
-  let randomId = generateRandomId().toString();
-  user["id"] = randomId;
-  users["users_list"].push(user);
-  return user;
-};
-
-
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    let result = addUser(userToAdd);
-    res.status(201).send(result);
+    userServices.addUser(userToAdd)
+      .then((newUser) => 
+        {const user = {...userToAdd, _id: newUser._id};
+        res.status(201).send(user);})
+      .catch((error) => 
+        {res.status(500).send(error);})
 });
 
 const deleteUserById = (id) => {
@@ -100,8 +57,11 @@ const deleteUserById = (id) => {
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
-    deleteUserById(id);
-    res.status(204).send();
+    userServices.deleteUserById(id)
+      .then((result) => 
+        {res.status(204).send();})
+      .catch((error) => {
+        res.status(500).send(error);})
 });
 
 
