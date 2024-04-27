@@ -20,12 +20,10 @@ app.listen(port, () => {
 
 app.get("/users", (req, res) => {
     const name = req.query.name;
-    if (name != undefined) {
-        userServices.getUsers(name)
-          .then((result => 
-            {res.status(200).send(result);}))
-          .catch((error) => {res.status(500).send(error);})
-    }
+    const job = req.query.job;
+    userServices.getUsers(name, job)
+      .then((result => {res.status(200).send(result);}))
+      .catch((error) => {res.status(500).send(error);})
 })
 
 app.get("/users/:id", (req, res) => {
@@ -49,11 +47,6 @@ app.post("/users", (req, res) => {
       .catch((error) => 
         {res.status(500).send(error);})
 });
-
-const deleteUserById = (id) => {
-    users["users_list"] = users["users_list"]
-        .filter((user) => user["id"] !== id);
-};
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];
