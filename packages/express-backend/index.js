@@ -36,8 +36,6 @@ app.get("/users/:id", (req, res) => {
     }
 })
 
-const generateRandomId = () => Math.floor(Math.random()*7817);
-
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
     userServices.addUser(userToAdd)
