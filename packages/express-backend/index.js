@@ -4,7 +4,6 @@ import userServices from "./user-services.js";
 
 const app = express();
 const port = 8000;
-// const user = require()
 
 app.use(cors());
 
@@ -54,15 +53,3 @@ app.delete("/users/:id", (req, res) => {
       .catch((error) => {
         res.status(500).send(error);})
 });
-
-
-app.delete("/users", (req, res) => {
-    const deleteUser = req.body;
-    let nameArray = findUserByName(deleteUser["name"]);
-    nameArray = nameArray.filter( (user) => user["job"] === deleteUser["job"]);
-    for (let i = 0; i < nameArray.length; i++) 
-    {
-        deleteUserById(nameArray[i].id);
-    }
-    res.status(204).send();
-})
