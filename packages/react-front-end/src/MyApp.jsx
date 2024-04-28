@@ -8,23 +8,24 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]);
 
-  function removeOneCharacter(id) {
-    // const updated = characters.filter((character, i) => {
-    //   return i !== index;
-    // })
-    // setCharacters(updated);
-    const promise = fetch(`http://localhost:8000/users/${id}`, 
+  function removeOneCharacter(index) {
+    const id = characters[index]._id;
+    fetch(`http://localhost:8000/users/${id}`, 
     {
       method: "DELETE"
-      }
-    );
-
-    promise.then(() => {
-      fetchUsers()
-                .then((res) => res.json())
-                .then((json) => setCharacters(json["users_list"]))
     }
-  );
+    )
+      .then((response) => {
+        if (response.status === 204) {
+          const updatedList = characters.filter((character, i) => i !== index);
+          setCharacters(updatedList);
+        }
+        else
+        {
+          console.log("User not found");
+        }
+    })
+      .catch(() => {console.log("Could not delete user");});
 
   }
 
@@ -47,7 +48,7 @@ function MyApp() {
   useEffect(() => {
     fetchUsers()
               .then((res) => res.json())
-              .then((json) => setCharacters(json["users_list"]))
+              .then((json) => setCharacters(json))
               .catch((error) => { console.log(error); });
   }, [] );
 
